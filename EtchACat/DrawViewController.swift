@@ -108,9 +108,10 @@ class DrawViewController: UIViewController {
             endPoint = CGPoint(x: startPoint!.x - 1, y: startPoint!.y)
         }
         else {
-            return // idk if necessary since all cases should be canceled but to be ultra safe
+            return // idk if necessary since all cases should be handled but to be safe
         }
         
+        // Only draw if within bounds
         if drawingView.bounds.contains(endPoint!) {
             addLine(fromPoint: startPoint!, toPoint: endPoint!)
             startPoint = endPoint!
@@ -222,6 +223,10 @@ extension DrawViewController {
             }
         }
         task.resume()
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
 
