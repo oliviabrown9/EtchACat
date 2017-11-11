@@ -18,21 +18,27 @@ class DrawViewController: UIViewController {
         
         leftDot.layer.cornerRadius = leftDot.frame.size.width/2.0
         rightDot.layer.cornerRadius = rightDot.frame.size.width/2.0
+        
+        drawingView.layer.cornerRadius = 10
+        testImageView.layer.cornerRadius = 10
+        
+        submitButton.layer.borderColor = UIColor.white.cgColor
+        submitButton.layer.borderWidth = 2.0
+        submitButton.layer.cornerRadius = 20
     }
     
-    var startAnglePoint: CGPoint?
     
+    
+    // MARK: UI Elements
     @IBOutlet weak var testImageView: UIImageView!
     @IBOutlet weak var drawingView: UIView!
-    
     @IBOutlet weak var leftWheel: UIView!
     @IBOutlet weak var rightWheel: UIView!
     @IBOutlet weak var rightDot: UIView!
     @IBOutlet weak var leftDot: UIView!
+    @IBOutlet weak var submitButton: UIButton!
     
-    
-    var tempData: Data? = nil
-    
+    var startAnglePoint: CGPoint?
     var startPoint: CGPoint? = nil
     var angleLast: CGFloat =  0.0
     
@@ -44,7 +50,9 @@ class DrawViewController: UIViewController {
         super.viewDidLoad()
         
         leftWheel.isUserInteractionEnabled = true
+        leftDot.isUserInteractionEnabled = true
         rightWheel.isUserInteractionEnabled = true
+        rightDot.isUserInteractionEnabled = true
         
     }
     
@@ -54,10 +62,10 @@ class DrawViewController: UIViewController {
         
         // check if user touched a wheel
         var wheel: UIView? = nil
-        if touch!.view == leftWheel {
+        if touch!.view == leftWheel || touch!.view == leftDot {
             wheel = leftWheel
         }
-        else if touch!.view == rightWheel {
+        else if touch!.view == rightWheel || touch?.view == rightDot {
             wheel = rightWheel
         }
         guard let rotatedWheel = wheel else {
@@ -81,7 +89,7 @@ class DrawViewController: UIViewController {
         
         // set end point of line
         if startPoint == nil {
-            startPoint = CGPoint(x: drawingView.frame.midX, y: drawingView.frame.midY)
+            startPoint = CGPoint(x: drawingView.bounds.midX, y: drawingView.bounds.midY)
         }
         var endPoint: CGPoint? = nil
         if wheel == leftWheel && isClockwise {
@@ -212,16 +220,6 @@ extension DrawViewController {
             }
             }
         task.resume()
-    }
-    
-    func loadNewImage() {
-        guard let data = tempData else {
-            print("failed")
-            return
-        }
-        // data?
-        let newImage = UIImage.init(data: data)
-        self.testImageView.image = newImage
     }
 }
 
