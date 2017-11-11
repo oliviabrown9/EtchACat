@@ -358,6 +358,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8GEKYYW3CQ;
+				FRAMEWORK_SEARCH_PATHS = (
+					$PODS_CONFIGURATION_BUILD_DIR/Alamofire,
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
 				INFOPLIST_FILE = EtchACat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.okitsolivia.EtchACat;
@@ -374,6 +379,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8GEKYYW3CQ;
+				FRAMEWORK_SEARCH_PATHS = (
+					$PODS_CONFIGURATION_BUILD_DIR/Alamofire,
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
 				INFOPLIST_FILE = EtchACat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.okitsolivia.EtchACat;
