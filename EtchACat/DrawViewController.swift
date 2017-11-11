@@ -96,16 +96,16 @@ class DrawViewController: UIViewController {
         }
         var endPoint: CGPoint? = nil
         if wheel == leftWheel && isClockwise {
-            endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y - 5)
+            endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y - 1)
         }
         else if wheel == leftWheel && !isClockwise {
-            endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y + 5)
+            endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y + 1)
         }
         else if wheel == rightWheel && isClockwise {
-            endPoint = CGPoint(x: startPoint!.x + 5, y: startPoint!.y)
+            endPoint = CGPoint(x: startPoint!.x + 1, y: startPoint!.y)
         }
         else if wheel == rightWheel && !isClockwise {
-            endPoint = CGPoint(x: startPoint!.x - 5, y: startPoint!.y)
+            endPoint = CGPoint(x: startPoint!.x - 1, y: startPoint!.y)
         }
         else {
             return // idk if necessary since all cases should be canceled but to be ultra safe
@@ -115,7 +115,6 @@ class DrawViewController: UIViewController {
             addLine(fromPoint: startPoint!, toPoint: endPoint!)
             startPoint = endPoint!
         }
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
