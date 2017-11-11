@@ -13,10 +13,13 @@ class DrawViewController: UIViewController {
     
     var startAnglePoint: CGPoint?
     
+    @IBOutlet weak var testImageView: UIImageView!
     @IBOutlet weak var drawingView: UIView!
     
     @IBOutlet weak var leftWheel: UIImageView!
     @IBOutlet weak var rightWheel: UIImageView!
+    
+    var tempData: Data? = nil
     
     var startPoint: CGPoint? = nil
     var angleLast: CGFloat =  0.0
@@ -34,6 +37,7 @@ class DrawViewController: UIViewController {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
+
         let touch = touches.first
         
         // check if user touched a wheel
@@ -86,7 +90,7 @@ class DrawViewController: UIViewController {
         addLine(fromPoint: startPoint!, toPoint: endPoint!)
         startPoint = endPoint!
     }
-
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard touches.count == 1 else {
             return
@@ -101,14 +105,21 @@ class DrawViewController: UIViewController {
     }
     
     @IBAction func submitPressed(_ sender: Any) {
+        
         let drawingImage =  UIImage.init(view: drawingView)
-        uploadImage(image: drawingImage)
+        let resizedImage = drawingImage.resized(toWidth: 256.0)
+        uploadImage(image: resizedImage!)
+//        testImageView.image = resizedImage
     }
     
     private func removeLines() {
         for sublayer in drawingView.layer.sublayers! {
-            sublayer.removeFromSuperlayer()
+            if sublayer.name == "line" {
+                sublayer.removeFromSuperlayer()
+            }
         }
+        testImageView.image = nil
+        testImageView.isHidden = false
     }
     
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
@@ -128,6 +139,7 @@ extension DrawViewController {
         line.path = linePath.cgPath
         line.strokeColor = UIColor.black.cgColor
         line.lineWidth = 1
+        line.name = "line"
         line.lineJoin = kCALineJoinRound
         self.drawingView.layer.addSublayer(line)
     }
@@ -164,35 +176,64 @@ extension DrawViewController {
             angleLast = degree
             returnData = false
         }
-        
         return returnData
     }
     
     // POSTing image to API
     func uploadImage(image: UIImage) {
         let imageData = UIImagePNGRepresentation(image)
-        let requestURLString = "13.92.99.130:7000"
         
-        Alamofire.upload(multipartFormData: { multipartFormData in
-            multipartFormData.append(imageData!, withName: "testImage", fileName: "testImage.png", mimeType: "image/png")
-        },
-                         to:requestURLString)
-        { (result) in
-            switch result {
-            case .success(let upload, _, _):
-                
-                upload.uploadProgress(closure: { (progress) in
-                    print("Upload Progress: \(progress.fractionCompleted)")
-                })
-                
-                upload.responseJSON { response in
-                    print(response.result.value as Any)
-                }
-                
-            case .failure(let encodingError):
-                print(encodingError)
+        let url = URL(string: "http://13.92.99.130:7000/edges2handbags_AtoB")!
+        var request = URLRequest(url: url)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        request.httpBody = imageData
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental
+                return
             }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+//                print("response = \(response)")
+            }
+            DispatchQueue.main.async {
+                let newImage = UIImage.init(data: data)
+                self.testImageView.image = newImage
+            }
+            }
+        task.resume()
+    }
+    
+    
+//    func loadLesson(onComplete: ([Lesson]) -> ()) {
+//
+//        httpGet(request) {
+//            (data, error) -> Void in
+//
+//            if error != nil {
+//                println(error)
+//            } else {
+//                let lessons = setupLesson(data)
+//                onComplete(lessons)
+//            }
+//        }
+//    }
+//
+//    loadLesson { (lessons) in
+//    for lesson in lessons {
+//    println(lesson)
+//    }
+//    }
+    
+    func loadNewImage() {
+        guard let data = tempData else {
+            print("failed")
+            return
         }
+        // data?
+        let newImage = UIImage.init(data: data)
+        self.testImageView.image = newImage
     }
 }
 
@@ -204,5 +245,14 @@ extension UIImage {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         self.init(cgImage: (image?.cgImage)!)
+    }
+
+    
+    func resized(toWidth width: CGFloat) -> UIImage? {
+        let canvasSize = CGSize(width: width, height: width)
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: canvasSize))
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
