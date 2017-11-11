@@ -21,6 +21,10 @@ class DrawViewController: UIViewController {
     var startPoint: CGPoint? = nil
     var angleLast: CGFloat =  0.0
     
+    override func becomeFirstResponder() -> Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -100,6 +104,18 @@ class DrawViewController: UIViewController {
         let drawingImage =  UIImage.init(view: drawingView)
         uploadImage(image: drawingImage)
     }
+    
+    private func removeLines() {
+        for sublayer in drawingView.layer.sublayers! {
+            sublayer.removeFromSuperlayer()
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            removeLines()
+        }
+    }
 }
 
 extension DrawViewController {
@@ -154,8 +170,8 @@ extension DrawViewController {
     
     // POSTing image to API
     func uploadImage(image: UIImage) {
-        let imageData = UIImagePNGRepresentation(image) // throwing in test image
-        let requestURLString = "https://cors-anywhere.herokuapp.com/https://pix2pix.affinelayer.com/edges2cats_AtoB"
+        let imageData = UIImagePNGRepresentation(image)
+        let requestURLString = "13.92.99.130:7000"
         
         Alamofire.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(imageData!, withName: "testImage", fileName: "testImage.png", mimeType: "image/png")
