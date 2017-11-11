@@ -107,8 +107,12 @@ class DrawViewController: UIViewController {
         else {
             return // idk if necessary since all cases should be canceled but to be ultra safe
         }
-        addLine(fromPoint: startPoint!, toPoint: endPoint!)
-        startPoint = endPoint!
+
+        if drawingView.bounds.contains(endPoint!) {
+            addLine(fromPoint: startPoint!, toPoint: endPoint!)
+            startPoint = endPoint!
+        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
