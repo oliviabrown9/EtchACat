@@ -13,10 +13,10 @@ class DrawViewController: UIViewController {
     
     var startAnglePoint: CGPoint?
     
+    @IBOutlet weak var drawingView: UIView!
+    
     @IBOutlet weak var leftWheel: UIImageView!
     @IBOutlet weak var rightWheel: UIImageView!
-    
-    @IBOutlet weak var drawingImageView: UIImageView!
     
     var startPoint: CGPoint? = nil
     var angleLast: CGFloat =  0.0
@@ -40,9 +40,8 @@ class DrawViewController: UIViewController {
         else if touch!.view == rightWheel {
             wheel = rightWheel
         }
-        // return if user did not touch a wheel
         guard let rotatedWheel = wheel else {
-            return
+            return // if user did not touch a wheel
         }
         
         // rotate wheel
@@ -62,7 +61,7 @@ class DrawViewController: UIViewController {
         
         // set end point of line
         if startPoint == nil {
-            startPoint = CGPoint(x: view.frame.midX, y: view.frame.midY)
+            startPoint = CGPoint(x: drawingView.frame.midX, y: drawingView.frame.midY)
         }
         var endPoint: CGPoint? = nil
         if wheel == leftWheel && isClockwise {
@@ -78,13 +77,10 @@ class DrawViewController: UIViewController {
             endPoint = CGPoint(x: startPoint!.x - 5, y: startPoint!.y)
         }
         else {
-            print("end point")
-            return // idk if necessary
+            return // idk if necessary since all cases should be canceled but to be ultra safe
         }
         addLine(fromPoint: startPoint!, toPoint: endPoint!)
         startPoint = endPoint!
-        // draw very small line from last point to a slightly larger point
-        // store end point as the "to" value of the line above
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -101,9 +97,9 @@ class DrawViewController: UIViewController {
     }
     
     @IBAction func submitPressed(_ sender: Any) {
-        uploadImage()
+        let drawingImage =  UIImage.init(view: drawingView)
+        uploadImage(image: drawingImage)
     }
-
 }
 
 extension DrawViewController {
@@ -114,11 +110,10 @@ extension DrawViewController {
         linePath.move(to: start)
         linePath.addLine(to: end)
         line.path = linePath.cgPath
-        line.strokeColor = UIColor.red.cgColor
+        line.strokeColor = UIColor.black.cgColor
         line.lineWidth = 1
         line.lineJoin = kCALineJoinRound
-        print("add line")
-        self.view.layer.addSublayer(line)
+        self.drawingView.layer.addSublayer(line)
     }
     
     func convertRadianToDegree(angle: CGFloat) -> CGFloat {
@@ -158,8 +153,8 @@ extension DrawViewController {
     }
     
     // POSTing image to API
-    func uploadImage() {
-        let imageData = UIImagePNGRepresentation(#imageLiteral(resourceName: "testImage")) // throwing in test image
+    func uploadImage(image: UIImage) {
+        let imageData = UIImagePNGRepresentation(image) // throwing in test image
         let requestURLString = "https://cors-anywhere.herokuapp.com/https://pix2pix.affinelayer.com/edges2cats_AtoB"
         
         Alamofire.upload(multipartFormData: { multipartFormData in
@@ -183,6 +178,15 @@ extension DrawViewController {
             }
         }
     }
-    
-    
+}
+
+// Convert UIView to UIImage
+extension UIImage {
+    convenience init(view: UIView) {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0)
+        view.drawHierarchy(in: view.bounds, afterScreenUpdates: false)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        self.init(cgImage: (image?.cgImage)!)
+    }
 }
