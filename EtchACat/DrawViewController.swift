@@ -7,27 +7,30 @@
 //
 
 import UIKit
-import Alamofire
 
 class DrawViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
     
-        leftWheel.layer.cornerRadius = leftWheel.frame.size.width/2.0
-        rightWheel.layer.cornerRadius = rightWheel.frame.size.width/2.0
+        // Make wheels & dots into circles
+        leftWheel.makeCircular()
+        rightWheel.makeCircular()
+        leftDot.makeCircular()
+        rightDot.makeCircular()
         
-        leftDot.layer.cornerRadius = leftDot.frame.size.width/2.0
-        rightDot.layer.cornerRadius = rightDot.frame.size.width/2.0
+        // Create wheel shadow
+        leftWheel.addShadow()
+        rightWheel.addShadow()
         
+        // Add corner radii
         drawingView.layer.cornerRadius = 10
         testImageView.layer.cornerRadius = 10
         
+        // Submit button style
         submitButton.layer.borderColor = UIColor.white.cgColor
         submitButton.layer.borderWidth = 2.0
         submitButton.layer.cornerRadius = 20
     }
-    
-    
     
     // MARK: UI Elements
     @IBOutlet weak var testImageView: UIImageView!
@@ -244,5 +247,18 @@ extension UIImage {
         defer { UIGraphicsEndImageContext() }
         draw(in: CGRect(origin: .zero, size: canvasSize))
         return UIGraphicsGetImageFromCurrentImageContext()
+    }
+}
+
+extension UIView {
+    func addShadow() {
+        self.layer.shadowOffset = CGSize.zero
+        self.layer.shadowRadius = 4
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.3
+    }
+    
+    func makeCircular() {
+        self.layer.cornerRadius = self.frame.size.width/2.0
     }
 }
