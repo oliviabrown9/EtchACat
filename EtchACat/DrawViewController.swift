@@ -40,6 +40,7 @@ class DrawViewController: UIViewController {
     @IBOutlet weak var rightDot: UIView!
     @IBOutlet weak var leftDot: UIView!
     @IBOutlet weak var submitButton: UIButton!
+    @IBOutlet weak var closePhotoButton: UIButton!
     
     var startAnglePoint: CGPoint?
     var startPoint: CGPoint? = nil
@@ -133,10 +134,16 @@ class DrawViewController: UIViewController {
     
     @IBAction func submitPressed(_ sender: Any) {
         submitButton.isHidden = true
-        removeLines()
         let drawingImage =  UIImage.init(view: drawingView)
         let resizedImage = drawingImage.resized(toWidth: 256.0)
         uploadImage(image: resizedImage!)
+    }
+    
+    @IBAction func closePhotoButtonPressed(_ sender: Any) {
+        resultImageView.image = nil
+        resultImageView.isHidden = true
+        closePhotoButton.isHidden = true
+        submitButton.isHidden = false
     }
     
     private func removeLines() {
@@ -149,6 +156,7 @@ class DrawViewController: UIViewController {
     
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
+            removeLines()
             resultImageView.image = nil
             resultImageView.isHidden = false
             submitButton.isHidden = false
@@ -219,7 +227,9 @@ extension DrawViewController {
             }
             DispatchQueue.main.async {
                 let newImage = UIImage.init(data: data)
+                self.resultImageView.isHidden = false
                 self.resultImageView.image = newImage
+                self.closePhotoButton.isHidden = false
             }
         }
         task.resume()
