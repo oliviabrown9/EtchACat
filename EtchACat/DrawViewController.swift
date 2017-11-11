@@ -46,11 +46,11 @@ class DrawViewController: UIViewController {
         // rotate wheel
         let position = touch!.location(in: self.view)
         let target = rotatedWheel.center
-        let angle1 = atan2(target.y-(startPoint?.y)!, target.x-(startPoint?.x)!)
-        let angle2 = atan2(target.y-position.y, target.x-position.x)
-        let angle3 = angle2-angle1
+        let angleA = atan2(target.y-(startPoint?.y)!, target.x-(startPoint?.x)!)
+        let angleB = atan2(target.y-position.y, target.x-position.x)
+        let angleC = angleB-angleA
         
-        rotatedWheel.transform = CGAffineTransform(rotationAngle: angle3)
+        rotatedWheel.transform = CGAffineTransform(rotationAngle: angleC)
         
         let angle = atan2f(Float(rotatedWheel.transform.b), Float(rotatedWheel.transform.a));
         if detectClockwise(radian: CGFloat(angle)) {
@@ -95,7 +95,7 @@ extension DrawViewController {
             angleLast = 0.0
         }
         
-        //moving too fast following anti-clockwise
+        //moving too fast following counterclockwise
         if angleLast < 100  && degree > 300 {
             angleLast = degree + 1
         }
@@ -110,12 +110,6 @@ extension DrawViewController {
         }
         
         return returnData
-    }
-}
-
-extension DrawViewController {
-    func radionToDegree(_ radian: CGFloat) -> CGFloat {
-        return radian * (180 / .pi)
     }
 }
 
