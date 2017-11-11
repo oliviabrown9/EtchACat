@@ -11,13 +11,25 @@ import Alamofire
 
 class DrawViewController: UIViewController {
     
+    override func viewWillAppear(_ animated: Bool) {
+    
+        leftWheel.layer.cornerRadius = leftWheel.frame.size.width/2.0
+        rightWheel.layer.cornerRadius = rightWheel.frame.size.width/2.0
+        
+        leftDot.layer.cornerRadius = leftDot.frame.size.width/2.0
+        rightDot.layer.cornerRadius = rightDot.frame.size.width/2.0
+    }
+    
     var startAnglePoint: CGPoint?
     
     @IBOutlet weak var testImageView: UIImageView!
     @IBOutlet weak var drawingView: UIView!
     
-    @IBOutlet weak var leftWheel: UIImageView!
-    @IBOutlet weak var rightWheel: UIImageView!
+    @IBOutlet weak var leftWheel: UIView!
+    @IBOutlet weak var rightWheel: UIView!
+    @IBOutlet weak var rightDot: UIView!
+    @IBOutlet weak var leftDot: UIView!
+    
     
     var tempData: Data? = nil
     
@@ -41,7 +53,7 @@ class DrawViewController: UIViewController {
         let touch = touches.first
         
         // check if user touched a wheel
-        var wheel: UIImageView? = nil
+        var wheel: UIView? = nil
         if touch!.view == leftWheel {
             wheel = leftWheel
         }
@@ -105,11 +117,10 @@ class DrawViewController: UIViewController {
     }
     
     @IBAction func submitPressed(_ sender: Any) {
-        
+        removeLines()
         let drawingImage =  UIImage.init(view: drawingView)
         let resizedImage = drawingImage.resized(toWidth: 256.0)
         uploadImage(image: resizedImage!)
-//        testImageView.image = resizedImage
     }
     
     private func removeLines() {
@@ -147,7 +158,6 @@ extension DrawViewController {
     func convertRadianToDegree(angle: CGFloat) -> CGFloat {
         var bearingDegrees = angle * (180 / .pi)
         if bearingDegrees > 0.0 {
-            
         } else {
             bearingDegrees =  bearingDegrees + 360
         }
@@ -189,13 +199,12 @@ extension DrawViewController {
         request.httpMethod = "POST"
         request.httpBody = imageData
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental
+            guard let data = data, error == nil else {
                 return
             }
             
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
-//                print("response = \(response)")
             }
             DispatchQueue.main.async {
                 let newImage = UIImage.init(data: data)
@@ -204,27 +213,6 @@ extension DrawViewController {
             }
         task.resume()
     }
-    
-    
-//    func loadLesson(onComplete: ([Lesson]) -> ()) {
-//
-//        httpGet(request) {
-//            (data, error) -> Void in
-//
-//            if error != nil {
-//                println(error)
-//            } else {
-//                let lessons = setupLesson(data)
-//                onComplete(lessons)
-//            }
-//        }
-//    }
-//
-//    loadLesson { (lessons) in
-//    for lesson in lessons {
-//    println(lesson)
-//    }
-//    }
     
     func loadNewImage() {
         guard let data = tempData else {
@@ -246,7 +234,6 @@ extension UIImage {
         UIGraphicsEndImageContext()
         self.init(cgImage: (image?.cgImage)!)
     }
-
     
     func resized(toWidth width: CGFloat) -> UIImage? {
         let canvasSize = CGSize(width: width, height: width)
