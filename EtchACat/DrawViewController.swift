@@ -25,7 +25,9 @@ class DrawViewController: UIViewController {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
         let touch = touches.first
-        var wheel: UIImageView = UIImageView()
+        
+        // check if user touched a wheel
+        var wheel: UIImageView? = nil
         if touch!.view == leftWheel {
             wheel = leftWheel
         }
@@ -33,15 +35,18 @@ class DrawViewController: UIViewController {
             wheel = rightWheel
         }
         
-        if wheel == leftWheel || wheel == rightWheel {
-            let position = touch!.location(in: self.view)
-            let target = wheel.center
-            let angle1 = atan2(target.y-(startPoint?.y)!, target.x-(startPoint?.x)!)
-            let angle2 = atan2(target.y-position.y, target.x-position.x)
-            let angle3 = angle2-angle1
-            
-            wheel.transform = CGAffineTransform(rotationAngle: angle3)
+        // return if user did not touch a wheel
+        guard let rotatedWheel = wheel else {
+            return
         }
+        
+        // rotate wheel
+        let position = touch!.location(in: self.view)
+        let target = rotatedWheel.center
+        let angle1 = atan2(target.y-(startPoint?.y)!, target.x-(startPoint?.x)!)
+        let angle2 = atan2(target.y-position.y, target.x-position.x)
+        let angle3 = angle2-angle1
+        rotatedWheel.transform = CGAffineTransform(rotationAngle: angle3)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
