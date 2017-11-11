@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class DrawViewController: UIViewController {
     
@@ -71,6 +72,34 @@ class DrawViewController: UIViewController {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         angleLast = 0
+    }
+    
+    func uploadImage() {
+        
+        // POST request
+        let imageData = UIImagePNGRepresentation(#imageLiteral(resourceName: "button"))
+        let requestURLString = "https://cors-anywhere.herokuapp.com/https://pix2pix.affinelayer.com/edges2cats_AtoB"
+        
+        Alamofire.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(imageData!, withName: "testImage", fileName: "testImage.png", mimeType: "image/png")
+        },
+                         to:requestURLString)
+        { (result) in
+            switch result {
+            case .success(let upload, _, _):
+                
+                upload.uploadProgress(closure: { (progress) in
+                    print("Upload Progress: \(progress.fractionCompleted)")
+                })
+                
+                upload.responseJSON { response in
+                    print(response.result.value)
+                }
+                
+            case .failure(let encodingError):
+                print(encodingError)
+            }
+        }
     }
 }
 
