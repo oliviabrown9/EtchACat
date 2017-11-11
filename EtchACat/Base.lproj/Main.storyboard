@@ -112,10 +112,10 @@
                         <outlet property="drawingView" destination="MWz-pa-XNh" id="2t2-tk-bov"/>
                         <outlet property="leftDot" destination="WUf-j0-Z5i" id="1tt-Jh-b7o"/>
                         <outlet property="leftWheel" destination="GCB-af-yK7" id="C81-Gr-MiO"/>
+                        <outlet property="resultImageView" destination="M5V-yF-nU8" id="eE5-8s-3wf"/>
                         <outlet property="rightDot" destination="Bpf-jG-yrN" id="dUh-dC-Ire"/>
                         <outlet property="rightWheel" destination="Uaa-kn-cMX" id="PuM-9M-2TS"/>
                         <outlet property="submitButton" destination="KZh-uv-l0H" id="zpD-Qr-cHk"/>
-                        <outlet property="testImageView" destination="M5V-yF-nU8" id="L8i-1j-7yA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -11,7 +11,7 @@ import UIKit
 class DrawViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
-    
+        
         // Make wheels & dots into circles
         leftWheel.makeCircular()
         rightWheel.makeCircular()
@@ -24,7 +24,7 @@ class DrawViewController: UIViewController {
         
         // Add corner radii
         drawingView.layer.cornerRadius = 10
-        testImageView.layer.cornerRadius = 10
+        resultImageView.layer.cornerRadius = 10
         
         // Submit button style
         submitButton.layer.borderColor = UIColor.white.cgColor
@@ -33,7 +33,7 @@ class DrawViewController: UIViewController {
     }
     
     // MARK: UI Elements
-    @IBOutlet weak var testImageView: UIImageView!
+    @IBOutlet weak var resultImageView: UIImageView!
     @IBOutlet weak var drawingView: UIView!
     @IBOutlet weak var leftWheel: UIView!
     @IBOutlet weak var rightWheel: UIView!
@@ -60,7 +60,7 @@ class DrawViewController: UIViewController {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
-
+        
         let touch = touches.first
         
         // check if user touched a wheel
@@ -110,7 +110,7 @@ class DrawViewController: UIViewController {
         else {
             return // idk if necessary since all cases should be canceled but to be ultra safe
         }
-
+        
         if drawingView.bounds.contains(endPoint!) {
             addLine(fromPoint: startPoint!, toPoint: endPoint!)
             startPoint = endPoint!
@@ -149,8 +149,8 @@ class DrawViewController: UIViewController {
     
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            testImageView.image = nil
-            testImageView.isHidden = false
+            resultImageView.image = nil
+            resultImageView.isHidden = false
             submitButton.isHidden = false
         }
     }
@@ -208,7 +208,6 @@ extension DrawViewController {
     // POSTing image to API
     func uploadImage(image: UIImage) {
         let imageData = UIImagePNGRepresentation(image)
-        
         let url = URL(string: "http://13.92.99.130:7000/edges2handbags_AtoB")!
         var request = URLRequest(url: url)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
@@ -218,15 +217,11 @@ extension DrawViewController {
             guard let data = data, error == nil else {
                 return
             }
-            
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-            }
             DispatchQueue.main.async {
                 let newImage = UIImage.init(data: data)
-                self.testImageView.image = newImage
+                self.resultImageView.image = newImage
             }
-            }
+        }
         task.resume()
     }
 }
