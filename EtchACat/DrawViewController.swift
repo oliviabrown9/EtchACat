@@ -125,6 +125,7 @@ class DrawViewController: UIViewController {
     }
     
     @IBAction func submitPressed(_ sender: Any) {
+        submitButton.isHidden = true
         removeLines()
         let drawingImage =  UIImage.init(view: drawingView)
         let resizedImage = drawingImage.resized(toWidth: 256.0)
@@ -137,13 +138,13 @@ class DrawViewController: UIViewController {
                 sublayer.removeFromSuperlayer()
             }
         }
-        testImageView.image = nil
-        testImageView.isHidden = false
     }
     
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            removeLines()
+            testImageView.image = nil
+            testImageView.isHidden = false
+            submitButton.isHidden = false
         }
     }
 }
