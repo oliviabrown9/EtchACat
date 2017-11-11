@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="ipad9_7" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -31,12 +31,21 @@
                                     <constraint firstAttribute="height" constant="150" id="umM-cn-rvg"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KZh-uv-l0H">
+                                <rect key="frame" x="488" y="369" width="49" height="30"/>
+                                <state key="normal" title="Submit"/>
+                                <connections>
+                                    <action selector="submitPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wrl-ax-MX9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="KZh-uv-l0H" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="3ss-m9-9fd"/>
                             <constraint firstItem="teA-ZI-9wg" firstAttribute="width" secondItem="teA-ZI-9wg" secondAttribute="height" multiplier="1:1" id="AMN-Hy-pAj"/>
                             <constraint firstItem="teA-ZI-9wg" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="EbW-Hx-adO"/>
                             <constraint firstItem="T5g-c4-KWI" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="Q5l-hz-nIa"/>
+                            <constraint firstItem="KZh-uv-l0H" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bcr-vQ-Qtq"/>
                             <constraint firstItem="T5g-c4-KWI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="cV9-3N-kkh"/>
                             <constraint firstItem="teA-ZI-9wg" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="oMZ-Lk-zud"/>
                         </constraints>
@@ -45,6 +54,7 @@
                     <connections>
                         <outlet property="leftWheel" destination="T5g-c4-KWI" id="BF5-tc-PW2"/>
                         <outlet property="rightWheel" destination="teA-ZI-9wg" id="eLX-oV-zT0"/>
+                        <outlet property="submitPressed" destination="KZh-uv-l0H" id="Umi-xa-IVA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

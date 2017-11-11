@@ -74,32 +74,8 @@ class DrawViewController: UIViewController {
         angleLast = 0
     }
     
-    func uploadImage() {
-        
-        // POST request
-        let imageData = UIImagePNGRepresentation(#imageLiteral(resourceName: "button"))
-        let requestURLString = "https://cors-anywhere.herokuapp.com/https://pix2pix.affinelayer.com/edges2cats_AtoB"
-        
-        Alamofire.upload(multipartFormData: { multipartFormData in
-            multipartFormData.append(imageData!, withName: "testImage", fileName: "testImage.png", mimeType: "image/png")
-        },
-                         to:requestURLString)
-        { (result) in
-            switch result {
-            case .success(let upload, _, _):
-                
-                upload.uploadProgress(closure: { (progress) in
-                    print("Upload Progress: \(progress.fractionCompleted)")
-                })
-                
-                upload.responseJSON { response in
-                    print(response.result.value)
-                }
-                
-            case .failure(let encodingError):
-                print(encodingError)
-            }
-        }
+    @IBAction func submitPressed(_ sender: Any) {
+        uploadImage()
     }
 }
 
@@ -140,6 +116,31 @@ extension DrawViewController {
         
         return returnData
     }
+    
+    // POSTing image to API
+    func uploadImage() {
+        let imageData = UIImagePNGRepresentation(#imageLiteral(resourceName: "testImage")) // throwing in test image
+        let requestURLString = "https://cors-anywhere.herokuapp.com/https://pix2pix.affinelayer.com/edges2cats_AtoB"
+        
+        Alamofire.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(imageData!, withName: "testImage", fileName: "testImage.png", mimeType: "image/png")
+        },
+                         to:requestURLString)
+        { (result) in
+            switch result {
+            case .success(let upload, _, _):
+                
+                upload.uploadProgress(closure: { (progress) in
+                    print("Upload Progress: \(progress.fractionCompleted)")
+                })
+                
+                upload.responseJSON { response in
+                    print(response.result.value as Any)
+                }
+                
+            case .failure(let encodingError):
+                print(encodingError)
+            }
+        }
+    }
 }
-
-
