@@ -21,6 +21,7 @@ class DrawViewController: UIViewController {
     @IBOutlet weak var closePhotoButton: UIButton!
     @IBOutlet weak var randomButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // Class variables
     var startAnglePoint: CGPoint?
@@ -169,6 +170,7 @@ class DrawViewController: UIViewController {
     
     // POSTs image of drawingView
     @IBAction func submitPressed(_ sender: Any) {
+        activityIndicator.startAnimating()
         clearButton.isHidden = true
         randomButton.isHidden = true
         let drawingImage =  UIImage.init(view: drawingView!)
@@ -270,7 +272,6 @@ extension DrawViewController {
     // POSTing image to API, turning the returned data into an image, and displaying the result
     private func uploadImage(image: UIImage) {
         var request = URLRequest(url: URL(string: "http://13.92.99.130:7000/edges2cats_AtoB")!) // our API
-//        var request = URLRequest(url: URL(string: "https://cors-anywhere.herokuapp.com/https://pix2pix.affinelayer.com/edges2cats_AtoB")!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         request.httpBody = UIImagePNGRepresentation(image)
@@ -281,6 +282,7 @@ extension DrawViewController {
             DispatchQueue.main.async {
                 self.submitButton.isHidden = true
                 self.resultImageView.image = UIImage.init(data: data)
+                self.activityIndicator.stopAnimating()
                 self.resultImageView.isHidden = false
                 self.closePhotoButton.isHidden = false
             }
