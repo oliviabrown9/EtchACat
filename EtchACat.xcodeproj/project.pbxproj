@@ -12,12 +12,9 @@
 		759B228E1FB6C0BC009C25DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 759B228C1FB6C0BC009C25DD /* Main.storyboard */; };
 		759B22901FB6C0BC009C25DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 759B228F1FB6C0BC009C25DD /* Assets.xcassets */; };
 		759B22931FB6C0BC009C25DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 759B22911FB6C0BC009C25DD /* LaunchScreen.storyboard */; };
-		B3FFB0AEA195CEEA25F574AE /* Pods_EtchACat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41CC99D6637FDABD1980F48C /* Pods_EtchACat.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		41CC99D6637FDABD1980F48C /* Pods_EtchACat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EtchACat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		727F52FF2086D7BF0FF37588 /* Pods-EtchACat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EtchACat.release.xcconfig"; path = "Pods/Target Support Files/Pods-EtchACat/Pods-EtchACat.release.xcconfig"; sourceTree = "<group>"; };
 		759B22851FB6C0BC009C25DD /* EtchACat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EtchACat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		759B22881FB6C0BC009C25DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		759B228A1FB6C0BC009C25DD /* DrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawViewController.swift; sourceTree = "<group>"; };
@@ -25,7 +22,6 @@
 		759B228F1FB6C0BC009C25DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		759B22921FB6C0BC009C25DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		759B22941FB6C0BC009C25DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		94C6D0376E03355CEB7068D3 /* Pods-EtchACat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EtchACat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EtchACat/Pods-EtchACat.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +29,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3FFB0AEA195CEEA25F574AE /* Pods_EtchACat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +40,6 @@
 			children = (
 				759B22871FB6C0BC009C25DD /* EtchACat */,
 				759B22861FB6C0BC009C25DD /* Products */,
-				E992A7CA8FD1659FF10B9551 /* Pods */,
 				E6167D29373340C3C3C0282A /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -74,18 +68,8 @@
 		E6167D29373340C3C3C0282A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				41CC99D6637FDABD1980F48C /* Pods_EtchACat.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E992A7CA8FD1659FF10B9551 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				94C6D0376E03355CEB7068D3 /* Pods-EtchACat.debug.xcconfig */,
-				727F52FF2086D7BF0FF37588 /* Pods-EtchACat.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,12 +79,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 759B22971FB6C0BC009C25DD /* Build configuration list for PBXNativeTarget "EtchACat" */;
 			buildPhases = (
-				4F6CDBB71A6EB0BD578AAF94 /* [CP] Check Pods Manifest.lock */,
 				759B22811FB6C0BC009C25DD /* Sources */,
 				759B22821FB6C0BC009C25DD /* Frameworks */,
 				759B22831FB6C0BC009C25DD /* Resources */,
-				FA72DCFEEBAEEB03143030D0 /* [CP] Embed Pods Frameworks */,
-				E14AC13B12575DBD980A9463 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -157,60 +138,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		4F6CDBB71A6EB0BD578AAF94 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-EtchACat-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E14AC13B12575DBD980A9463 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EtchACat/Pods-EtchACat-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FA72DCFEEBAEEB03143030D0 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-EtchACat/Pods-EtchACat-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EtchACat/Pods-EtchACat-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		759B22811FB6C0BC009C25DD /* Sources */ = {
@@ -353,13 +280,11 @@
 		};
 		759B22981FB6C0BC009C25DD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 94C6D0376E03355CEB7068D3 /* Pods-EtchACat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8GEKYYW3CQ;
 				FRAMEWORK_SEARCH_PATHS = (
-					$PODS_CONFIGURATION_BUILD_DIR/Alamofire,
 					"$(inherited)",
 					"$(SRCROOT)",
 				);
@@ -374,13 +299,11 @@
 		};
 		759B22991FB6C0BC009C25DD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 727F52FF2086D7BF0FF37588 /* Pods-EtchACat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8GEKYYW3CQ;
 				FRAMEWORK_SEARCH_PATHS = (
-					$PODS_CONFIGURATION_BUILD_DIR/Alamofire,
 					"$(inherited)",
 					"$(SRCROOT)",
 				);
