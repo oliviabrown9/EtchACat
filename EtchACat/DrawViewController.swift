@@ -51,7 +51,14 @@ class DrawViewController: UIViewController {
         submitButton.layer.cornerRadius = 20
     }
     
+    var lastPoint = CGPoint.zero
+    var firstTime = true
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
+        if firstTime {
+            lastPoint = CGPoint(x: drawingView.bounds.midX, y: drawingView.bounds.midY)
+            firstTime = false
+        }
         
         // Check if user touched a wheel
         let touch = touches.first
@@ -63,53 +70,56 @@ class DrawViewController: UIViewController {
             wheel = rightWheel
         }
         // Return if user did not touch a wheel
-        guard let rotatedWheel = wheel else {
-            return
-        }
-        // Rotate wheel
-        let position = touch!.location(in: self.view)
-        let target = rotatedWheel.center
-        let angleA = atan2(target.y-(startAnglePoint?.y)!, target.x-(startAnglePoint?.x)!)
-        let angleB = atan2(target.y-position.y, target.x-position.x)
-        let rotationAngle = angleB - angleA
-        rotatedWheel.transform = CGAffineTransform(rotationAngle: rotationAngle)
-        
-        // Check direction of turn
-        var isClockwise: Bool = false
-        if detectClockwise(radian: rotationAngle) {
-            isClockwise = true
-        }
-        
-        // Set the starting point to the center of screen for first time
-        if startPoint == nil {
-            startPoint = CGPoint(x: drawingView.bounds.midX, y: drawingView.bounds.midY)
-        }
-        // Set the end point of the line based on wheel and direction of turn
-        var endPoint: CGPoint? = nil
-        if wheel == leftWheel {
-            if isClockwise {
-                endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y - 1)
+        //        guard let rotatedWheel = wheel else {
+        //            return
+        //        }
+        if let rotatedWheel = wheel {
+            // Rotate wheel
+            let position = touch!.location(in: self.view)
+            let target = rotatedWheel.center
+            let angleA = atan2(target.y-(startAnglePoint?.y)!, target.x-(startAnglePoint?.x)!)
+            let angleB = atan2(target.y-position.y, target.x-position.x)
+            let rotationAngle = angleB - angleA
+            rotatedWheel.transform = CGAffineTransform(rotationAngle: rotationAngle)
+            
+            // Check direction of turn
+            var isClockwise: Bool = false
+            if detectClockwise(radian: rotationAngle) {
+                isClockwise = true
             }
-            else {
-                endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y + 1)
+            
+            // Set the starting point to the center of screen for first time
+            if startPoint == nil {
+                startPoint = CGPoint(x: drawingView.bounds.midX, y: drawingView.bounds.midY)
             }
-        }
-        else if wheel == rightWheel {
-            if isClockwise {
-                endPoint = CGPoint(x: startPoint!.x + 1, y: startPoint!.y)
+            // Set the end point of the line based on wheel and direction of turn
+            var endPoint: CGPoint? = nil
+            if wheel == leftWheel {
+                if isClockwise {
+                    endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y - 1)
+                }
+                else {
+                    endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y + 1)
+                }
             }
-            else {
-                endPoint = CGPoint(x: startPoint!.x - 1, y: startPoint!.y)
+            else if wheel == rightWheel {
+                if isClockwise {
+                    endPoint = CGPoint(x: startPoint!.x + 1, y: startPoint!.y)
+                }
+                else {
+                    endPoint = CGPoint(x: startPoint!.x - 1, y: startPoint!.y)
+                }
+            }
+            // Draw line if it's within bounds & set starting point to the end of this line
+            if drawingView.bounds.contains(endPoint!) {
+                addLine(fromPoint: startPoint!, toPoint: endPoint!)
+                startPoint = endPoint!
             }
         }
         else {
-            return
-        }
-        
-        // Draw line if it's within bounds & set starting point to the end of this line
-        if drawingView.bounds.contains(endPoint!) {
-            addLine(fromPoint: startPoint!, toPoint: endPoint!)
-            startPoint = endPoint!
+            let currentPoint = touch!.location(in: drawingView)
+            addLine(fromPoint: lastPoint, toPoint: currentPoint)
+            lastPoint = currentPoint
         }
     }
     
@@ -119,7 +129,12 @@ class DrawViewController: UIViewController {
             return
         }
         if let touch = touches.first {
-            startAnglePoint = touch.location(in: view)
+            if touch.view == leftWheel || touch.view == rightWheel {
+                startAnglePoint = touch.location(in: view)
+            }
+            else if touch.view == drawingView {
+                lastPoint = touch.location(in: view)
+            }
         }
     }
     
@@ -163,7 +178,7 @@ class DrawViewController: UIViewController {
 
 extension DrawViewController {
     // Draw a line between two points
-    private func addLine(fromPoint start: CGPoint, toPoint end:CGPoint) {
+    private func addLine(fromPoint start: CGPoint, toPoint end: CGPoint) {
         let line = CAShapeLayer()
         let linePath = UIBezierPath()
         linePath.move(to: start)
@@ -213,7 +228,8 @@ extension DrawViewController {
     
     // POSTing image to API, turning the returned data into an image, and displaying the result
     private func uploadImage(image: UIImage) {
-        var request = URLRequest(url: URL(string: "http://13.92.99.130:7000/edges2cats_AtoB")!)
+        var request = URLRequest(url: URL(string: "http://13.92.99.130:7000/edges2cats_AtoB")!) // our API
+//        var request = URLRequest(url: URL(string: "https://cors-anywhere.herokuapp.com/https://pix2pix.affinelayer.com/edges2cats_AtoB")!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         request.httpBody = UIImagePNGRepresentation(image)
