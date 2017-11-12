@@ -54,6 +54,21 @@ class DrawViewController: UIViewController {
     var lastPoint: CGPoint? = nil
     var firstTime = true
     
+    // Sets initial state of startAnglePoint to be location of touch
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard touches.count == 1 else {
+            return
+        }
+        if let touch = touches.first {
+            if touch.view == leftWheel || touch.view == rightWheel || touch.view == leftDot || touch.view == rightDot {
+                startAnglePoint = touch.location(in: view)
+            }
+            else if touch.view == drawingView {
+                lastPoint = touch.location(in: drawingView)
+            }
+        }
+    }
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
         
         // Check if user touched a wheel
@@ -126,36 +141,6 @@ class DrawViewController: UIViewController {
         return nil
     }
     
-    // Sets initial state of startAnglePoint to be location of touch
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard touches.count == 1 else {
-            return
-        }
-        if let touch = touches.first {
-            if touch.view == leftWheel || touch.view == rightWheel || touch.view == leftDot || touch.view == rightDot {
-                startAnglePoint = touch.location(in: view)
-            }
-            else if touch.view == drawingView {
-                lastPoint = touch.location(in: drawingView)
-            }
-        }
-    }
-    
-    // POSTs image of drawingView
-    @IBAction func submitPressed(_ sender: Any) {
-        let drawingImage =  UIImage.init(view: drawingView!)
-        let resizedImage = drawingImage.resizedForUpload()
-        uploadImage(image: resizedImage!)
-    }
-    
-    // Hides photo to allow user to continue drawing
-    @IBAction func closePhotoButtonPressed(_ sender: Any) {
-        resultImageView.image = nil
-        resultImageView.isHidden = true
-        closePhotoButton.isHidden = true
-        submitButton.isHidden = false
-    }
-    
     // Clears the drawn lines from the screen
     private func removeLines() {
         guard let sublayers = drawingView.layer.sublayers else {
@@ -176,6 +161,25 @@ class DrawViewController: UIViewController {
             resultImageView.isHidden = false
             submitButton.isHidden = false
         }
+    }
+    
+    // POSTs image of drawingView
+    @IBAction func submitPressed(_ sender: Any) {
+        let drawingImage =  UIImage.init(view: drawingView!)
+        let resizedImage = drawingImage.resizedForUpload()
+        uploadImage(image: resizedImage!)
+    }
+    
+    // Hides photo to allow user to continue drawing
+    @IBAction func closePhotoButtonPressed(_ sender: Any) {
+        resultImageView.image = nil
+        resultImageView.isHidden = true
+        closePhotoButton.isHidden = true
+        submitButton.isHidden = false
+    }
+    
+    @IBAction func clearButtonPressed(_ sender: Any) {
+        removeLines()
     }
 }
 
