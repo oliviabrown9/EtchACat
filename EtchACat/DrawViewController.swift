@@ -18,7 +18,7 @@ class DrawViewController: UIViewController {
         leftDot.makeCircular()
         rightDot.makeCircular()
         
-        // Create wheel shadow
+        // Add shadows
         leftWheel.addShadow()
         rightWheel.addShadow()
         
@@ -131,7 +131,10 @@ class DrawViewController: UIViewController {
         submitButton.isHidden = true
         let drawingImage =  UIImage.init(view: drawingView)
         let resizedImage = drawingImage.resized(toWidth: 256.0)
-        uploadImage(image: resizedImage!)
+        let invertedImage = resizedImage?.invertColofOfImage()
+        resultImageView.isHidden = false
+        resultImageView.image = invertedImage
+//        uploadImage(image: invertedImage!)
     }
     
     // Hides photo to allow user to continue drawing
@@ -259,6 +262,25 @@ extension UIImage {
         defer { UIGraphicsEndImageContext() }
         draw(in: CGRect(origin: .zero, size: canvasSize))
         return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    
+    func invertColofOfImage() -> UIImage {
+        var image = self
+        let context = CIContext(options: nil)
+        
+        if let currentFilter = CIFilter(name: "CIColorInvert") {
+            let beginImage = CIImage(image: image)
+            currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
+            
+            if let output = currentFilter.outputImage {
+                if let cgimg = context.createCGImage(output, from: output.extent) {
+                    image = UIImage(cgImage: cgimg)
+                    print("working!")
+                    return image
+                }
+            }
+        }
+        return image
     }
 }
 
