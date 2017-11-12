@@ -10,32 +10,6 @@ import UIKit
 
 class DrawViewController: UIViewController {
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        // Make wheels & dots into circles
-        leftWheel.makeCircular()
-        rightWheel.makeCircular()
-        leftDot.makeCircular()
-        rightDot.makeCircular()
-        
-        // Add shadows
-        leftWheel.addShadow(radius: 4)
-        rightWheel.addShadow(radius: 4)
-        drawingView.addShadow(radius: 50)
-        resultImageView.addShadow(radius: 50)
-        
-        // Add corner radii
-//        drawingView.layer.cornerRadius = 10
-//        resultImageView.layer.cornerRadius = 10
-        resultImageView.layer.borderColor = UIColor(red:0.75, green:0.75, blue:0.75, alpha:1.0).cgColor
-        resultImageView.layer.borderWidth = 7 // do we like the border?
-        
-        // Submit button style
-        submitButton.layer.borderColor = UIColor.white.cgColor
-        submitButton.layer.borderWidth = 2.0
-        submitButton.layer.cornerRadius = 20
-    }
-    
     // UI Elements
     @IBOutlet weak var resultImageView: UIImageView!
     @IBOutlet weak var drawingView: UIView!
@@ -51,15 +25,36 @@ class DrawViewController: UIViewController {
     var startPoint: CGPoint? = nil
     var angleLast: CGFloat =  0.0
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    // Setting up the UI
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        // Make wheels & dots into circles
+        leftWheel.makeCircular()
+        rightWheel.makeCircular()
+        leftDot.makeCircular()
+        rightDot.makeCircular()
+        
+        // Add shadows
+        leftWheel.addShadow(radius: 4)
+        rightWheel.addShadow(radius: 4)
+        drawingView.addShadow(radius: 50)
+        resultImageView.addShadow(radius: 50)
+        
+        // Add border to resultImageView
+        resultImageView.layer.borderColor = UIColor(red:0.75, green:0.75, blue:0.75, alpha:1.0).cgColor
+        resultImageView.layer.borderWidth = 7
+        
+        // Submit button style
+        submitButton.layer.borderColor = UIColor.white.cgColor
+        submitButton.layer.borderWidth = 2.0
+        submitButton.layer.cornerRadius = 20
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
         
-        let touch = touches.first
-        
         // Check if user touched a wheel
+        let touch = touches.first
         var wheel: UIView? = nil
         if touch!.view == leftWheel || touch!.view == leftDot {
             wheel = leftWheel
@@ -71,18 +66,17 @@ class DrawViewController: UIViewController {
         guard let rotatedWheel = wheel else {
             return
         }
-        
-        // rotate wheel
+        // Rotate wheel
         let position = touch!.location(in: self.view)
         let target = rotatedWheel.center
         let angleA = atan2(target.y-(startAnglePoint?.y)!, target.x-(startAnglePoint?.x)!)
         let angleB = atan2(target.y-position.y, target.x-position.x)
-        rotatedWheel.transform = CGAffineTransform(rotationAngle: angleB-angleA)
+        let rotationAngle = angleB - angleA
+        rotatedWheel.transform = CGAffineTransform(rotationAngle: rotationAngle)
         
         // Check direction of turn
-        let angle = atan2f(Float(rotatedWheel.transform.b), Float(rotatedWheel.transform.a));
         var isClockwise: Bool = false
-        if detectClockwise(radian: CGFloat(angle)) {
+        if detectClockwise(radian: rotationAngle) {
             isClockwise = true
         }
         
@@ -92,23 +86,27 @@ class DrawViewController: UIViewController {
         }
         // Set the end point of the line based on wheel and direction of turn
         var endPoint: CGPoint? = nil
-        if wheel == leftWheel && isClockwise {
-            endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y - 1)
+        if wheel == leftWheel {
+            if isClockwise {
+                endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y - 1)
+            }
+            else {
+                endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y + 1)
+            }
         }
-        else if wheel == leftWheel && !isClockwise {
-            endPoint = CGPoint(x: startPoint!.x, y: startPoint!.y + 1)
-        }
-        else if wheel == rightWheel && isClockwise {
-            endPoint = CGPoint(x: startPoint!.x + 1, y: startPoint!.y)
-        }
-        else if wheel == rightWheel && !isClockwise {
-            endPoint = CGPoint(x: startPoint!.x - 1, y: startPoint!.y)
+        else if wheel == rightWheel {
+            if isClockwise {
+                endPoint = CGPoint(x: startPoint!.x + 1, y: startPoint!.y)
+            }
+            else {
+                endPoint = CGPoint(x: startPoint!.x - 1, y: startPoint!.y)
+            }
         }
         else {
             return
         }
         
-        // Draw line if it's within bounds & set starting point of next line to the end of this line
+        // Draw line if it's within bounds & set starting point to the end of this line
         if drawingView.bounds.contains(endPoint!) {
             addLine(fromPoint: startPoint!, toPoint: endPoint!)
             startPoint = endPoint!
@@ -124,17 +122,12 @@ class DrawViewController: UIViewController {
             startAnglePoint = touch.location(in: view)
         }
     }
-    
-    // Resets angleLast for next touch
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        angleLast = 0
-    }
-    
-    // Captures an image of the drawing and POSTs to server
+
+    // POSTs image of drawingView
     @IBAction func submitPressed(_ sender: Any) {
         submitButton.isHidden = true
         let drawingImage =  UIImage.init(view: drawingView!)
-        let resizedImage = drawingImage.resized(toWidth: 256.0)
+        let resizedImage = drawingImage.resizedForUpload()
         uploadImage(image: resizedImage!)
     }
     
@@ -167,8 +160,8 @@ class DrawViewController: UIViewController {
 }
 
 extension DrawViewController {
-    // Draw a line between two points with an identifying name
-    func addLine(fromPoint start: CGPoint, toPoint end:CGPoint) {
+    // Draw a line between two points
+    private func addLine(fromPoint start: CGPoint, toPoint end:CGPoint) {
         let line = CAShapeLayer()
         let linePath = UIBezierPath()
         linePath.move(to: start)
@@ -182,7 +175,7 @@ extension DrawViewController {
     }
     
     // Convert radians to degrees for turn direction calculation
-    func convertRadianToDegree(angle: CGFloat) -> CGFloat {
+    private func convertRadianToDegree(angle: CGFloat) -> CGFloat {
         var bearingDegrees = angle * (180 / .pi)
         if bearingDegrees > 0.0 {
         } else {
@@ -191,49 +184,44 @@ extension DrawViewController {
         return CGFloat(bearingDegrees)
     }
     
-    // Checks the direction a wheel is spinning (true if clockwise; false if counterclockwise)
-    func detectClockwise(radian: CGFloat) -> Bool {
+    // Checks the direction a wheel is spinning (true if clockwise & false if counterclockwise)
+    private func detectClockwise(radian: CGFloat) -> Bool {
         var degree = self.convertRadianToDegree(angle: radian)
         degree = degree + 0.5
         
-        // Handles moving too fast following clockwise turn
+        // Handles moving too quickly on clockwise turn
         if angleLast > 300.0 && degree < 50 {
             angleLast = 0.0
         }
         
-        // Handles moving too fast following counterclockwise turn
+        // Handles moving too quickly on counterclockwise turn
         if angleLast < 100  && degree > 300 {
             angleLast = degree + 1
         }
         
-        var returnData = false
         if angleLast <= degree  {
             angleLast = degree
-            returnData = true
+            return true
         }
         else {
             angleLast = degree
-            returnData = false
+            return false
         }
-        return returnData
     }
     
     // POSTing image to API, turning the returned data into an image, and displaying the result
     private func uploadImage(image: UIImage) {
-        let imageData = UIImagePNGRepresentation(image)
-        let url = URL(string: "http://13.92.99.130:7000/edges2handbags_AtoB")!
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: URL(string: "http://13.92.99.130:7000/edges2cats_AtoB")!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
-        request.httpBody = imageData
+        request.httpBody = UIImagePNGRepresentation(image)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
                 return
             }
             DispatchQueue.main.async {
-                let newImage = UIImage.init(data: data)
+                self.resultImageView.image = UIImage.init(data: data)
                 self.resultImageView.isHidden = false
-                self.resultImageView.image = newImage
                 self.closePhotoButton.isHidden = false
             }
         }
@@ -251,14 +239,14 @@ extension UIImage {
     convenience init(view: UIView) {
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0)
         view.drawHierarchy(in: view.bounds, afterScreenUpdates: false)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
+        let image = UIGraphicsGetImageFromCurrentImageContext()?.cgImage
         UIGraphicsEndImageContext()
-        self.init(cgImage: (image?.cgImage)!)
+        self.init(cgImage: (image!))
     }
     
     // Resizing the image to be compatible with the API
-    func resized(toWidth width: CGFloat) -> UIImage? {
-        let canvasSize = CGSize(width: width, height: width)
+    fileprivate func resizedForUpload() -> UIImage? {
+        let canvasSize = CGSize(width: 256.0, height: 256.0)
         UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
         defer { UIGraphicsEndImageContext() }
         draw(in: CGRect(origin: .zero, size: canvasSize))
@@ -275,7 +263,7 @@ extension UIView {
         self.layer.shadowOpacity = 0.3
     }
     
-    // Makes a view a perfect circle
+    // Makes a view a circle
     func makeCircular() {
         self.layer.cornerRadius = self.frame.size.width/2.0
     }
