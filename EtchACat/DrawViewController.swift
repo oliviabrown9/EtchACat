@@ -131,10 +131,8 @@ class DrawViewController: UIViewController {
         submitButton.isHidden = true
         let drawingImage =  UIImage.init(view: drawingView)
         let resizedImage = drawingImage.resized(toWidth: 256.0)
-        let invertedImage = resizedImage?.invertColofOfImage()
-        resultImageView.isHidden = false
-        resultImageView.image = invertedImage
-//        uploadImage(image: invertedImage!)
+//        let invertedImage = resizedImage?.invertColofOfImage() // if we want the bs inverted image
+        uploadImage(image: resizedImage!)
     }
     
     // Hides photo to allow user to continue drawing
@@ -275,7 +273,6 @@ extension UIImage {
             if let output = currentFilter.outputImage {
                 if let cgimg = context.createCGImage(output, from: output.extent) {
                     image = UIImage(cgImage: cgimg)
-                    print("working!")
                     return image
                 }
             }

@@ -95,7 +95,7 @@
                                     <constraint firstAttribute="width" secondItem="CfJ-rZ-58y" secondAttribute="height" multiplier="1:1" id="KNu-sz-op4"/>
                                     <constraint firstAttribute="height" constant="25" id="auP-ps-tMr"/>
                                 </constraints>
-                                <state key="normal" image="cancel"/>
+                                <state key="normal" image="exittt"/>
                                 <connections>
                                     <action selector="closePhotoButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZCr-p9-4mp"/>
                                 </connections>
@@ -138,6 +138,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="cancel" width="128" height="128"/>
+        <image name="exittt" width="128" height="128"/>
     </resources>
 </document>
