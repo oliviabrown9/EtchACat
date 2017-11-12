@@ -51,14 +51,10 @@ class DrawViewController: UIViewController {
         submitButton.layer.cornerRadius = 20
     }
     
-    var lastPoint = CGPoint.zero
+    var lastPoint: CGPoint? = nil
     var firstTime = true
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
-        if firstTime {
-            lastPoint = CGPoint(x: drawingView.bounds.midX, y: drawingView.bounds.midY)
-            firstTime = false
-        }
         
         // Check if user touched a wheel
         let touch = touches.first
@@ -117,8 +113,12 @@ class DrawViewController: UIViewController {
             }
         }
         else {
+            if lastPoint == nil {
+                lastPoint = touch!.location(in: drawingView)
+                return
+            }
             let currentPoint = touch!.location(in: drawingView)
-            addLine(fromPoint: lastPoint, toPoint: currentPoint)
+            addLine(fromPoint: lastPoint!, toPoint: currentPoint)
             lastPoint = currentPoint
         }
     }
@@ -133,7 +133,7 @@ class DrawViewController: UIViewController {
                 startAnglePoint = touch.location(in: view)
             }
             else if touch.view == drawingView {
-                lastPoint = touch.location(in: view)
+                lastPoint = touch.location(in: drawingView)
             }
         }
     }
