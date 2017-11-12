@@ -51,6 +51,11 @@ class DrawViewController: UIViewController {
         submitButton.layer.borderColor = UIColor.white.cgColor
         submitButton.layer.borderWidth = 2.0
         submitButton.layer.cornerRadius = 20
+        
+        // Random button style
+        randomButton.layer.borderColor = UIColor.white.cgColor
+        randomButton.layer.borderWidth = 2.0
+        randomButton.layer.cornerRadius = 20
     }
     
     var lastPoint: CGPoint? = nil
