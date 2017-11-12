@@ -156,7 +156,7 @@ class DrawViewController: UIViewController {
     }
     
     // Erases lines and photo on shake
-    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+    override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             removeLines()
             resultImageView.image = nil
