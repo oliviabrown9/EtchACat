@@ -19,6 +19,8 @@ class DrawViewController: UIViewController {
     @IBOutlet weak var leftDot: UIView!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var closePhotoButton: UIButton!
+    @IBOutlet weak var randomButton: UIButton!
+    @IBOutlet weak var clearButton: UIButton!
     
     // Class variables
     var startAnglePoint: CGPoint?
@@ -71,7 +73,6 @@ class DrawViewController: UIViewController {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
         
-        // Check if user touched a wheel
         guard let touch = touches.first else {
             return
         }
@@ -90,7 +91,6 @@ class DrawViewController: UIViewController {
             }
             let endPoint: CGPoint? = setEndPoint(wheel: touchedWheel)
             
-            // Draw line if it's within bounds
             if drawingView.bounds.contains(endPoint!) {
                 addLine(fromPoint: startPoint!, toPoint: endPoint!)
                 startPoint = endPoint!
@@ -158,14 +158,25 @@ class DrawViewController: UIViewController {
             resultImageView.image = nil
             resultImageView.isHidden = false
             submitButton.isHidden = false
+            removeRandom()
         }
     }
     
     // POSTs image of drawingView
     @IBAction func submitPressed(_ sender: Any) {
+        clearButton.isHidden = true
+        randomButton.isHidden = true
         let drawingImage =  UIImage.init(view: drawingView!)
-        let resizedImage = drawingImage.resizedForUpload()
+        let resizedImage = drawingImage.resizeForUpload()
         uploadImage(image: resizedImage!)
+    }
+    
+    private func removeRandom() {
+        for subview in drawingView.subviews {
+            if subview.tag == 1000 {
+                subview.removeFromSuperview()
+            }
+        }
     }
     
     // Hides photo to allow user to continue drawing
@@ -173,11 +184,31 @@ class DrawViewController: UIViewController {
         resultImageView.image = nil
         resultImageView.isHidden = true
         closePhotoButton.isHidden = true
+        clearButton.isHidden = false
         submitButton.isHidden = false
+        removeLines()
+        removeRandom()
+        randomButton.isHidden = false
     }
     
     @IBAction func clearButtonPressed(_ sender: Any) {
         removeLines()
+        removeRandom()
+        randomButton.isHidden = false
+    }
+    
+    @IBAction func randomButtonPressed(_ sender: Any) {
+        removeLines()
+        removeRandom()
+        
+        let possibleImages: [String] = ["1", "2"]
+        let random = arc4random_uniform(UInt32(possibleImages.count))
+        let imageName = possibleImages[Int(random)]
+        let image = UIImage(named: imageName)
+        let imageView = UIImageView(image: image!)
+        imageView.frame = CGRect(x: drawingView.bounds.minX, y: drawingView.bounds.minY, width: drawingView.frame.width, height: drawingView.frame.height)
+        imageView.tag = 1000
+        drawingView.addSubview(imageView)
     }
 }
 
@@ -269,7 +300,7 @@ extension UIImage {
     }
     
     // Resizing the image to be compatible with the API
-    fileprivate func resizedForUpload() -> UIImage? {
+    fileprivate func resizeForUpload() -> UIImage? {
         let canvasSize = CGSize(width: 256.0, height: 256.0)
         UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
         defer { UIGraphicsEndImageContext() }
