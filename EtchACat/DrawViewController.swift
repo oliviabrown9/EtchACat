@@ -19,12 +19,16 @@ class DrawViewController: UIViewController {
         rightDot.makeCircular()
         
         // Add shadows
-        leftWheel.addShadow()
-        rightWheel.addShadow()
+        leftWheel.addShadow(radius: 4)
+        rightWheel.addShadow(radius: 4)
+        drawingView.addShadow(radius: 50)
+        resultImageView.addShadow(radius: 50)
         
         // Add corner radii
-        drawingView.layer.cornerRadius = 10
-        resultImageView.layer.cornerRadius = 10
+//        drawingView.layer.cornerRadius = 10
+//        resultImageView.layer.cornerRadius = 10
+        resultImageView.layer.borderColor = UIColor(red:0.75, green:0.75, blue:0.75, alpha:1.0).cgColor
+        resultImageView.layer.borderWidth = 7 // do we like the border?
         
         // Submit button style
         submitButton.layer.borderColor = UIColor.white.cgColor
@@ -129,9 +133,8 @@ class DrawViewController: UIViewController {
     // Captures an image of the drawing and POSTs to server
     @IBAction func submitPressed(_ sender: Any) {
         submitButton.isHidden = true
-        let drawingImage =  UIImage.init(view: drawingView)
+        let drawingImage =  UIImage.init(view: drawingView!)
         let resizedImage = drawingImage.resized(toWidth: 256.0)
-//        let invertedImage = resizedImage?.invertColofOfImage() // if we want the bs inverted image
         uploadImage(image: resizedImage!)
     }
     
@@ -261,31 +264,13 @@ extension UIImage {
         draw(in: CGRect(origin: .zero, size: canvasSize))
         return UIGraphicsGetImageFromCurrentImageContext()
     }
-    
-    func invertColofOfImage() -> UIImage {
-        var image = self
-        let context = CIContext(options: nil)
-        
-        if let currentFilter = CIFilter(name: "CIColorInvert") {
-            let beginImage = CIImage(image: image)
-            currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
-            
-            if let output = currentFilter.outputImage {
-                if let cgimg = context.createCGImage(output, from: output.extent) {
-                    image = UIImage(cgImage: cgimg)
-                    return image
-                }
-            }
-        }
-        return image
-    }
 }
 
 extension UIView {
     // Adds a light shadow to a view
-    func addShadow() {
+    func addShadow(radius: CGFloat) {
         self.layer.shadowOffset = CGSize.zero
-        self.layer.shadowRadius = 4
+        self.layer.shadowRadius = radius
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 0.3
     }

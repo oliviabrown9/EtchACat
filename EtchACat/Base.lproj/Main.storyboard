@@ -24,9 +24,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KZh-uv-l0H">
-                                <rect key="frame" x="444.5" y="701" width="136" height="47"/>
+                                <rect key="frame" x="444.5" y="708" width="136" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="47" id="Fmj-72-nXH"/>
+                                    <constraint firstAttribute="height" constant="40" id="Fmj-72-nXH"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="25"/>
                                 <state key="normal" title="    Submit    ">
@@ -37,14 +37,14 @@
                                 </connections>
                             </button>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MWz-pa-XNh">
-                                <rect key="frame" x="214" y="65" width="596" height="596"/>
-                                <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="210.5" y="65" width="603" height="603"/>
+                                <color key="backgroundColor" red="0.75294117647058822" green="0.75294117647058822" blue="0.75294117647058822" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="MWz-pa-XNh" secondAttribute="height" multiplier="1:1" id="qPA-Ne-klL"/>
                                 </constraints>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="M5V-yF-nU8">
-                                <rect key="frame" x="214" y="65" width="596" height="596"/>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="M5V-yF-nU8">
+                                <rect key="frame" x="210.5" y="65" width="603" height="603"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="M5V-yF-nU8" secondAttribute="height" multiplier="1:1" id="e2g-Pb-8ot"/>
                                 </constraints>
@@ -90,12 +90,12 @@
                                 </constraints>
                             </view>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CfJ-rZ-58y">
-                                <rect key="frame" x="201" y="52" width="25" height="25"/>
+                                <rect key="frame" x="197.5" y="52" width="25" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="CfJ-rZ-58y" secondAttribute="height" multiplier="1:1" id="KNu-sz-op4"/>
                                     <constraint firstAttribute="height" constant="25" id="auP-ps-tMr"/>
                                 </constraints>
-                                <state key="normal" image="exittt"/>
+                                <state key="normal" image="exit"/>
                                 <connections>
                                     <action selector="closePhotoButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZCr-p9-4mp"/>
                                 </connections>
@@ -138,6 +138,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="exittt" width="128" height="128"/>
+        <image name="exit" width="128" height="128"/>
     </resources>
 </document>
