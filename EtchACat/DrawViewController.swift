@@ -122,10 +122,9 @@ class DrawViewController: UIViewController {
             startAnglePoint = touch.location(in: view)
         }
     }
-
+    
     // POSTs image of drawingView
     @IBAction func submitPressed(_ sender: Any) {
-        submitButton.isHidden = true
         let drawingImage =  UIImage.init(view: drawingView!)
         let resizedImage = drawingImage.resizedForUpload()
         uploadImage(image: resizedImage!)
@@ -141,7 +140,10 @@ class DrawViewController: UIViewController {
     
     // Clears the drawn lines from the screen
     private func removeLines() {
-        for sublayer in drawingView.layer.sublayers! {
+        guard let sublayers = drawingView.layer.sublayers else {
+            return
+        }
+        for sublayer in sublayers {
             if sublayer.name == "line" {
                 sublayer.removeFromSuperlayer()
             }
@@ -220,6 +222,7 @@ extension DrawViewController {
                 return
             }
             DispatchQueue.main.async {
+                self.submitButton.isHidden = true
                 self.resultImageView.image = UIImage.init(data: data)
                 self.resultImageView.isHidden = false
                 self.closePhotoButton.isHidden = false
