@@ -10,7 +10,7 @@ import UIKit
 
 class DrawViewController: UIViewController {
     
-    // UI Elements
+    // IBOutlets
     @IBOutlet weak var resultImageView: UIImageView!
     @IBOutlet weak var drawingView: UIView!
     @IBOutlet weak var leftWheel: UIView!
@@ -22,6 +22,10 @@ class DrawViewController: UIViewController {
     @IBOutlet weak var randomButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var dogOrCatLabel: UILabel!
+    
+    // Class constants
+    let grayColor = UIColor(red:0.75, green:0.75, blue:0.75, alpha:1.0)
     
     // Class variables
     var startAnglePoint: CGPoint?
@@ -45,7 +49,7 @@ class DrawViewController: UIViewController {
         resultImageView.addShadow(radius: 50)
         
         // Add border to resultImageView
-        resultImageView.layer.borderColor = UIColor(red:0.75, green:0.75, blue:0.75, alpha:1.0).cgColor // same gray as background
+        resultImageView.layer.borderColor = grayColor.cgColor
         resultImageView.layer.borderWidth = 7
         
         // Submit button style
@@ -157,7 +161,7 @@ class DrawViewController: UIViewController {
         }
     }
     
-    // Erases lines and photo on shake
+    // Erases on shake
     override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             removeLines()
@@ -190,6 +194,7 @@ class DrawViewController: UIViewController {
     @IBAction func closePhotoButtonPressed(_ sender: Any) {
         resultImageView.image = nil
         resultImageView.isHidden = true
+        dogOrCatLabel.isHidden = true
         closePhotoButton.isHidden = true
         clearButton.isHidden = false
         submitButton.isHidden = false
@@ -208,10 +213,11 @@ class DrawViewController: UIViewController {
         removeLines()
         removeRandom()
         
-        let possibleImages: [String] = ["1", "2"]
-        let random = arc4random_uniform(UInt32(possibleImages.count))
-        let imageName = possibleImages[Int(random)]
-        let image = UIImage(named: imageName)
+        let possibleTypes: [String] = ["cat", "dog"]
+        let randomType = arc4random_uniform(UInt32(possibleTypes.count))
+        var possibleImages: [String] = ["cats1", "cats2", "cats3", "cats4", "cats5", "dogs1", "dogs2", "dogs3", "dogs4", "dogs5"]
+        let randomImageName = possibleImages[Int(arc4random_uniform(UInt32(possibleImages.count)))]
+        let image = UIImage(named: randomImageName)
         let imageView = UIImageView(image: image!)
         imageView.frame = CGRect(x: drawingView.bounds.minX, y: drawingView.bounds.minY, width: drawingView.frame.width, height: drawingView.frame.height)
         imageView.tag = 1000
@@ -271,16 +277,41 @@ extension DrawViewController {
     
     // POSTing image to API, turning the returned data into an image, and displaying the result
     private func uploadImage(image: UIImage) {
-        var request = URLRequest(url: URL(string: "http://13.92.99.130:7000/edges2cats_AtoB")!) // our API
+        var request = URLRequest(url: URL(string: "http://13.92.99.130:7000/")!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         request.httpBody = UIImagePNGRepresentation(image)
+//        let animalType = request.value(forHTTPHeaderField: "predicted_class")
+//        let test = request.allHTTPHeaderFields
+//        print(test)
+        
+
+        
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
                 return
             }
+            
+            var animalType: String? = nil
+            if let httpStatus = response as? HTTPURLResponse {
+                let headerDict = httpStatus.allHeaderFields
+                animalType = headerDict["predicted_class"] as? String
+            }
+            
+            guard let type = animalType else {
+                return
+            }
+            
             DispatchQueue.main.async {
+                if type == "cat" {
+                    self.dogOrCatLabel.text = "It's a cat!"
+                }
+                else if type == "dog" {
+                    self.dogOrCatLabel.text = "It's a dog!"
+                }
+                
                 self.submitButton.isHidden = true
+                self.dogOrCatLabel.isHidden = false
                 self.resultImageView.image = UIImage.init(data: data)
                 self.activityIndicator.stopAnimating()
                 self.resultImageView.isHidden = false

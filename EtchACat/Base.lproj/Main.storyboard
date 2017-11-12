@@ -12,6 +12,7 @@
     <customFonts key="customFonts">
         <array key="Avenir.ttc">
             <string>Avenir-Book</string>
+            <string>Avenir-Heavy</string>
             <string>Avenir-Medium</string>
         </array>
     </customFonts>
@@ -134,10 +135,17 @@
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ecq-9Y-YRs">
                                 <rect key="frame" x="550" y="718" width="20" height="20"/>
                             </activityIndicatorView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="It's a dog!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EF0-lN-8in">
+                                <rect key="frame" x="453.5" y="713.5" width="118" height="34.5"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="25"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="MWz-pa-XNh" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="45" id="1mV-0A-3tQ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="EF0-lN-8in" secondAttribute="bottom" constant="20" id="3D5-dR-CGo"/>
                             <constraint firstItem="M5V-yF-nU8" firstAttribute="leading" secondItem="CfJ-rZ-58y" secondAttribute="trailing" constant="-12" id="3QV-dp-85e"/>
                             <constraint firstItem="6Os-mh-GQX" firstAttribute="leading" secondItem="CfJ-rZ-58y" secondAttribute="trailing" constant="741.5" id="B0X-6T-1Wb"/>
                             <constraint firstItem="eEq-ug-jUL" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="DLs-He-LbH"/>
@@ -163,6 +171,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="KZh-uv-l0H" secondAttribute="bottom" constant="20" id="r3g-t0-ebE"/>
                             <constraint firstItem="KZh-uv-l0H" firstAttribute="leading" secondItem="eEq-ug-jUL" secondAttribute="trailing" constant="55" id="ras-3h-lTb"/>
                             <constraint firstItem="KZh-uv-l0H" firstAttribute="leading" secondItem="ecq-9Y-YRs" secondAttribute="trailing" constant="15" id="rkj-uY-NkI"/>
+                            <constraint firstItem="EF0-lN-8in" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="sjh-67-qwY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -171,6 +180,7 @@
                         <outlet property="activityIndicator" destination="ecq-9Y-YRs" id="lYw-Lw-wUT"/>
                         <outlet property="clearButton" destination="6Os-mh-GQX" id="aBC-HE-acl"/>
                         <outlet property="closePhotoButton" destination="CfJ-rZ-58y" id="gSx-Lw-hfC"/>
+                        <outlet property="dogOrCatLabel" destination="EF0-lN-8in" id="fIf-XG-DyC"/>
                         <outlet property="drawingView" destination="MWz-pa-XNh" id="2t2-tk-bov"/>
                         <outlet property="leftDot" destination="WUf-j0-Z5i" id="1tt-Jh-b7o"/>
                         <outlet property="leftWheel" destination="GCB-af-yK7" id="C81-Gr-MiO"/>
