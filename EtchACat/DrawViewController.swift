@@ -212,11 +212,10 @@ class DrawViewController: UIViewController {
     @IBAction func randomButtonPressed(_ sender: Any) {
         removeLines()
         removeRandom()
-        
-        let possibleTypes: [String] = ["cat", "dog"]
-        let randomType = arc4random_uniform(UInt32(possibleTypes.count))
+
         var possibleImages: [String] = ["cats1", "cats2", "cats3", "cats4", "cats5", "dogs1", "dogs2", "dogs3", "dogs4", "dogs5"]
-        let randomImageName = possibleImages[Int(arc4random_uniform(UInt32(possibleImages.count)))]
+        let random = Int(arc4random_uniform(UInt32(possibleImages.count)))
+        let randomImageName = possibleImages[random]
         let image = UIImage(named: randomImageName)
         let imageView = UIImageView(image: image!)
         imageView.frame = CGRect(x: drawingView.bounds.minX, y: drawingView.bounds.minY, width: drawingView.frame.width, height: drawingView.frame.height)
