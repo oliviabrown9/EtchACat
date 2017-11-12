@@ -57,21 +57,19 @@ class DrawViewController: UIViewController {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
         
         // Check if user touched a wheel
-        let touch = touches.first
+        guard let touch = touches.first else {
+            return
+        }
         var wheel: UIView? = nil
-        if touch!.view == leftWheel || touch!.view == leftDot {
+        if touch.view == leftWheel || touch.view == leftDot {
             wheel = leftWheel
         }
-        else if touch!.view == rightWheel || touch?.view == rightDot {
+        else if touch.view == rightWheel || touch.view == rightDot {
             wheel = rightWheel
         }
-        // Return if user did not touch a wheel
-        //        guard let rotatedWheel = wheel else {
-        //            return
-        //        }
         if let rotatedWheel = wheel {
             // Rotate wheel
-            let position = touch!.location(in: self.view)
+            let position = touch.location(in: self.view)
             let target = rotatedWheel.center
             let angleA = atan2(target.y-(startAnglePoint?.y)!, target.x-(startAnglePoint?.x)!)
             let angleB = atan2(target.y-position.y, target.x-position.x)
@@ -112,12 +110,12 @@ class DrawViewController: UIViewController {
                 startPoint = endPoint!
             }
         }
-        else {
+        else if touch.view == drawingView {
             if lastPoint == nil {
-                lastPoint = touch!.location(in: drawingView)
+                lastPoint = touch.location(in: drawingView)
                 return
             }
-            let currentPoint = touch!.location(in: drawingView)
+            let currentPoint = touch.location(in: drawingView)
             addLine(fromPoint: lastPoint!, toPoint: currentPoint)
             lastPoint = currentPoint
         }
@@ -129,7 +127,7 @@ class DrawViewController: UIViewController {
             return
         }
         if let touch = touches.first {
-            if touch.view == leftWheel || touch.view == rightWheel {
+            if touch.view == leftWheel || touch.view == rightWheel || touch.view == leftDot || touch.view == rightDot {
                 startAnglePoint = touch.location(in: view)
             }
             else if touch.view == drawingView {
