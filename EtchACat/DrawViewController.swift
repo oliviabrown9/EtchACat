@@ -42,7 +42,7 @@ class DrawViewController: UIViewController {
         resultImageView.addShadow(radius: 50)
         
         // Add border to resultImageView
-        resultImageView.layer.borderColor = UIColor(red:0.75, green:0.75, blue:0.75, alpha:1.0).cgColor
+        resultImageView.layer.borderColor = UIColor(red:0.75, green:0.75, blue:0.75, alpha:1.0).cgColor // same gray as background
         resultImageView.layer.borderWidth = 7
         
         // Submit button style
@@ -82,20 +82,15 @@ class DrawViewController: UIViewController {
         else if touch.view == rightWheel || touch.view == rightDot {
             wheel = rightWheel
         }
-        if let rotatedWheel = wheel {
-            rotateWheel(touch: touch, rotatedWheel: rotatedWheel)
-            let rotationAngle = atan2f(Float(rotatedWheel.transform.b), Float(rotatedWheel.transform.a))
-            let isClockwise: Bool = detectClockwise(radian: CGFloat(rotationAngle))
+        if let touchedWheel = wheel {
+            rotateWheel(touch: touch, wheel: touchedWheel)
             
-            // Set the starting point to the center of screen for first time
             if startPoint == nil {
                 startPoint = CGPoint(x: drawingView.bounds.midX, y: drawingView.bounds.midY)
             }
+            let endPoint: CGPoint? = setEndPoint(wheel: touchedWheel)
             
-            // Set the end point of the line based on wheel and direction of turn
-            let endPoint: CGPoint? = setEndPoint(rotatedWheel: rotatedWheel, isClockwise: isClockwise)
-            
-            // Draw line if it's within bounds & set starting point to the end of this line
+            // Draw line if it's within bounds
             if drawingView.bounds.contains(endPoint!) {
                 addLine(fromPoint: startPoint!, toPoint: endPoint!)
                 startPoint = endPoint!
@@ -112,17 +107,20 @@ class DrawViewController: UIViewController {
         }
     }
     
-    private func rotateWheel(touch: UITouch, rotatedWheel: UIView) {
+    private func rotateWheel(touch: UITouch, wheel: UIView) {
         let position = touch.location(in: self.view)
-        let target = rotatedWheel.center
+        let target = wheel.center
         let angleA = atan2(target.y-(startAnglePoint?.y)!, target.x-(startAnglePoint?.x)!)
         let angleB = atan2(target.y-position.y, target.x-position.x)
         let rotationAngle = angleB - angleA
-        rotatedWheel.transform = CGAffineTransform(rotationAngle: rotationAngle)
+        wheel.transform = CGAffineTransform(rotationAngle: rotationAngle)
     }
     
-    private func setEndPoint(rotatedWheel: UIView, isClockwise: Bool) -> CGPoint? {
-        if rotatedWheel == leftWheel {
+    private func setEndPoint(wheel: UIView) -> CGPoint? {
+        let rotationAngle = atan2f(Float(wheel.transform.b), Float(wheel.transform.a))
+        let isClockwise: Bool = detectClockwise(radian: CGFloat(rotationAngle))
+        
+        if wheel == leftWheel {
             if isClockwise {
                 return CGPoint(x: startPoint!.x, y: startPoint!.y - 1)
             }
@@ -130,7 +128,7 @@ class DrawViewController: UIViewController {
                 return CGPoint(x: startPoint!.x, y: startPoint!.y + 1)
             }
         }
-        else if rotatedWheel == rightWheel {
+        else if wheel == rightWheel {
             if isClockwise {
                 return CGPoint(x: startPoint!.x + 1, y: startPoint!.y)
             }
