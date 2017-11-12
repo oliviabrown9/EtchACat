@@ -132,7 +132,7 @@
                                 </constraints>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ecq-9Y-YRs">
-                                <rect key="frame" x="502" y="374" width="20" height="20"/>
+                                <rect key="frame" x="550" y="718" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -142,9 +142,9 @@
                             <constraint firstItem="6Os-mh-GQX" firstAttribute="leading" secondItem="CfJ-rZ-58y" secondAttribute="trailing" constant="741.5" id="B0X-6T-1Wb"/>
                             <constraint firstItem="eEq-ug-jUL" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="DLs-He-LbH"/>
                             <constraint firstItem="Uaa-kn-cMX" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-5" id="Fci-z7-sug"/>
-                            <constraint firstItem="ecq-9Y-YRs" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="KiC-fA-mVp"/>
                             <constraint firstItem="KZh-uv-l0H" firstAttribute="top" secondItem="M5V-yF-nU8" secondAttribute="bottom" constant="40" id="Kld-iA-de5"/>
                             <constraint firstItem="Uaa-kn-cMX" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="-5" id="NLf-1j-cft"/>
+                            <constraint firstItem="ecq-9Y-YRs" firstAttribute="centerY" secondItem="KZh-uv-l0H" secondAttribute="centerY" id="PyC-Xz-NsN"/>
                             <constraint firstItem="M5V-yF-nU8" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="45" id="SOo-qc-ERn"/>
                             <constraint firstItem="eEq-ug-jUL" firstAttribute="leading" secondItem="biO-r3-bcH" secondAttribute="trailing" constant="55" id="VJl-ZH-RuH"/>
                             <constraint firstItem="Uaa-kn-cMX" firstAttribute="leading" secondItem="KZh-uv-l0H" secondAttribute="trailing" constant="150" id="W9h-ZE-CV5"/>
@@ -160,9 +160,9 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6Os-mh-GQX" secondAttribute="trailing" constant="20" id="hFF-m5-B6Q"/>
                             <constraint firstItem="M5V-yF-nU8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="kMI-lf-Qee"/>
                             <constraint firstItem="M5V-yF-nU8" firstAttribute="top" secondItem="CfJ-rZ-58y" secondAttribute="bottom" constant="-12" id="l02-l1-JDe"/>
-                            <constraint firstItem="ecq-9Y-YRs" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="nq4-HA-7nr"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="KZh-uv-l0H" secondAttribute="bottom" constant="20" id="r3g-t0-ebE"/>
                             <constraint firstItem="KZh-uv-l0H" firstAttribute="leading" secondItem="eEq-ug-jUL" secondAttribute="trailing" constant="55" id="ras-3h-lTb"/>
+                            <constraint firstItem="KZh-uv-l0H" firstAttribute="leading" secondItem="ecq-9Y-YRs" secondAttribute="trailing" constant="15" id="rkj-uY-NkI"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
