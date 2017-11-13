@@ -48,10 +48,6 @@ class DrawViewController: UIViewController {
         drawingView.addShadow(radius: 50)
         resultImageView.addShadow(radius: 50)
         
-        // Add border to resultImageView
-        resultImageView.layer.borderColor = grayColor.cgColor
-        resultImageView.layer.borderWidth = 7
-        
         // Submit button style
         submitButton.layer.borderColor = UIColor.white.cgColor
         submitButton.layer.borderWidth = 2.0
@@ -73,7 +69,10 @@ class DrawViewController: UIViewController {
         }
         if let touch = touches.first {
             if touch.view == leftWheel || touch.view == rightWheel || touch.view == leftDot || touch.view == rightDot {
-                startAnglePoint = touch.location(in: view)
+                if firstTime {
+                    startAnglePoint = touch.location(in: view)
+                    firstTime = false
+                }
             }
             else if touch.view == drawingView {
                 lastPoint = touch.location(in: drawingView)
@@ -280,11 +279,6 @@ extension DrawViewController {
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         request.httpBody = UIImagePNGRepresentation(image)
-//        let animalType = request.value(forHTTPHeaderField: "predicted_class")
-//        let test = request.allHTTPHeaderFields
-//        print(test)
-        
-
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
