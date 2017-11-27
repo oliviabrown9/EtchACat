@@ -6,5 +6,5 @@ of that animal.
 
 This repository is for the iOS side. If you're interested in the machine learning, check out Chris's [repository](https://github.com/chrisyeh96/pix2pix-tensorflow).
 
-<img src="images/dogDraw.jpg" width="400px"> <img src="images/dogFilled.jpg" width="400px">
-<img src="images/catDraw.jpg" width="400px"> <img src="images/catFilled.jpg" width="400px">
+<img src="Images/dogDraw.jpg" width="400px"> <img src="Images/dogFilled.jpg" width="400px">
+<img src="Images/catDraw.jpg" width="400px"> <img src="Images/catFilled.jpg" width="400px">
